@@ -1,0 +1,69 @@
+# ZCMS Layer for Heidegger–Spinoza–Nietzsche Engine
+# --------------------------------------------------
+# Adds Zero Circle coordinates and categorical field mapping.
+
+from typing import Dict, Any
+from math import sin, cos, pi
+
+class ZCMSLayer:
+    """
+    Zero Circle Math System (ZCMS) integration layer.
+    Each philosophical lens is mapped to a circle zone:
+        Zone H → Ontological (Heidegger)
+        Zone S → Substantial (Spinoza)
+        Zone N → Dynamic (Nietzsche)
+    """
+
+    def __init__(self, radius: float = 1.0):
+        self.radius = radius
+
+    def map_to_circle(self, lens: str, weight: float) -> Dict[str, Any]:
+        """Assign circular coordinates based on lens identity."""
+        angle_map = {
+            "Heidegger": 0,
+            "Spinoza": 2 * pi / 3,
+            "Nietzsche": 4 * pi / 3,
+        }
+        angle = angle_map.get(lens, 0)
+        return {
+            "lens": lens,
+            "zone": f"ZC-{lens[0]}",
+            "coords": {
+                "x": self.radius * cos(angle) * weight,
+                "y": self.radius * sin(angle) * weight,
+            },
+            "field_intensity": weight,
+        }
+
+    def apply(self, hsn_output: Dict[str, Any]) -> Dict[str, Any]:
+        """Fuse HSN output with Zero Circle coordinates."""
+        config = hsn_output["config"]
+        decomposition = hsn_output["decomposition"]
+
+        mapped = {
+            "Heidegger": self.map_to_circle("Heidegger", config.heidegger_weight),
+            "Spinoza": self.map_to_circle("Spinoza", config.spinoza_weight),
+            "Nietzsche": self.map_to_circle("Nietzsche", config.nietzsche_weight),
+        }
+
+        return {
+            "concept": hsn_output["concept"],
+            "combined_prompt": hsn_output["combined_prompt"],
+            "zero_circle_map": mapped,
+            "decomposition": decomposition,
+        }
+
+
+# Example usage:
+if __name__ == "__main__":
+    from hsn_engine import HSNEngine, HSNConfig  # assuming previous module name
+
+    engine = HSNEngine(HSNConfig(1.2, 1.0, 1.5))
+    hsn_output = engine.generate("standard hot mug")
+
+    zcms = ZCMSLayer(radius=1.0)
+    zcms_output = zcms.apply(hsn_output)
+
+    print("=== ZCMS Zero Circle Map ===")
+    for lens, data in zcms_output["zero_circle_map"].items():
+        print(f"{lens}: {data}")
