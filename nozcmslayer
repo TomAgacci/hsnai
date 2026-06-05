@@ -1,0 +1,166 @@
+# ZCMS Heidegger–Spinoza–Nietzsche Generative Engine
+# ---------------------------------------------------
+# Core idea:
+#   - Input: base concept (e.g. "hot mug")
+#   - Output: structured description + prompt fragments
+#     decomposed into three lenses:
+#       * Heideggerian (Being / readiness-to-hand)
+#       * Spinozan (substance / modes / continuity)
+#       * Nietzschean (force / intensity / valuation)
+
+from dataclasses import dataclass
+from typing import Dict, Any
+
+
+@dataclass
+class HSNConfig:
+    heidegger_weight: float = 1.0
+    spinoza_weight: float = 1.0
+    nietzsche_weight: float = 1.0
+
+    def normalized(self) -> "HSNConfig":
+        total = self.heidegger_weight + self.spinoza_weight + self.nietzsche_weight
+        if total == 0:
+            return HSNConfig(1.0, 1.0, 1.0)
+        return HSNConfig(
+            self.heidegger_weight / total,
+            self.spinoza_weight / total,
+            self.nietzsche_weight / total,
+        )
+
+
+class HeideggerModule:
+    """Phenomenological / existential articulation."""
+
+    def describe(self, concept: str) -> Dict[str, Any]:
+        return {
+            "lens": "Heidegger",
+            "focus": "being-in-the-world",
+            "keywords": [
+                "ready-to-hand",
+                "presence",
+                "everydayness",
+                "worldhood",
+                "use-oriented"
+            ],
+            "prompt_fragment": (
+                f"Emphasize the {concept} as ready-to-hand, "
+                f"embedded in everyday use, with tactile presence, "
+                f"subtle wear, and a sense of lived familiarity."
+            ),
+        }
+
+
+class SpinozaModule:
+    """Substance / mode / continuity articulation."""
+
+    def describe(self, concept: str) -> Dict[str, Any]:
+        return {
+            "lens": "Spinoza",
+            "focus": "substance-and-modes",
+            "keywords": [
+                "continuous substance",
+                "immanent causality",
+                "unity",
+                "extension",
+                "parallelism"
+            ],
+            "prompt_fragment": (
+                f"Render the {concept} as a continuous expression of one substance, "
+                f"with smooth curvature, unified flows, and seamless transitions "
+                f"between object, environment, and forces acting on it."
+            ),
+        }
+
+
+class NietzscheModule:
+    """Force / intensity / valuation articulation."""
+
+    def describe(self, concept: str) -> Dict[str, Any]:
+        return {
+            "lens": "Nietzsche",
+            "focus": "will-to-power / intensity",
+            "keywords": [
+                "force",
+                "becoming",
+                "affirmation",
+                "contrast",
+                "overflowing energy"
+            ],
+            "prompt_fragment": (
+                f"Infuse the {concept} with will-to-power: bold contrasts, "
+                f"dynamic lighting, a sense of overflowing energy and "
+                f"intense becoming rather than static being."
+            ),
+        }
+
+
+class HSNEngine:
+    """
+    ZCMS Heidegger–Spinoza–Nietzsche Generative Engine
+
+    Usage:
+        engine = HSNEngine()
+        result = engine.generate("hot mug")
+        print(result["combined_prompt"])
+    """
+
+    def __init__(self, config: HSNConfig | None = None):
+        self.config = (config or HSNConfig()).normalized()
+        self.heidegger = HeideggerModule()
+        self.spinoza = SpinozaModule()
+        self.nietzsche = NietzscheModule()
+
+    def _weighted_concat(self, parts: Dict[str, Dict[str, Any]]) -> str:
+        """Combine prompt fragments according to weights."""
+        h = parts["heidegger"]["prompt_fragment"]
+        s = parts["spinoza"]["prompt_fragment"]
+        n = parts["nietzsche"]["prompt_fragment"]
+
+        # Simple weight-aware concatenation; you can swap this for
+        # something more sophisticated (e.g. LLM-based fusion).
+        segments = []
+        if self.config.heidegger_weight > 0:
+            segments.append(f"[Heidegger {self.config.heidegger_weight:.2f}] {h}")
+        if self.config.spinoza_weight > 0:
+            segments.append(f"[Spinoza {self.config.spinoza_weight:.2f}] {s}")
+        if self.config.nietzsche_weight > 0:
+            segments.append(f"[Nietzsche {self.config.nietzsche_weight:.2f}] {n}")
+        return " ".join(segments)
+
+    def generate(self, concept: str) -> Dict[str, Any]:
+        """Return structured philosophical decomposition + combined prompt."""
+        h_desc = self.heidegger.describe(concept)
+        s_desc = self.spinoza.describe(concept)
+        n_desc = self.nietzsche.describe(concept)
+
+        parts = {
+            "heidegger": h_desc,
+            "spinoza": s_desc,
+            "nietzsche": n_desc,
+        }
+
+        combined_prompt = self._weighted_concat(parts)
+
+        return {
+            "concept": concept,
+            "config": self.config,
+            "decomposition": parts,
+            "combined_prompt": combined_prompt,
+        }
+
+
+# Example usage (you can delete this in production):
+if __name__ == "__main__":
+    engine = HSNEngine(HSNConfig(
+        heidegger_weight=1.2,
+        spinoza_weight=1.0,
+        nietzsche_weight=1.5,
+    ))
+    result = engine.generate("standard hot mug")
+    print("=== Combined Prompt ===")
+    print(result["combined_prompt"])
+    print("\n=== Decomposition ===")
+    for k, v in result["decomposition"].items():
+        print(f"\n[{k.upper()}]")
+        print(v["prompt_fragment"])
