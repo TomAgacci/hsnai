@@ -1,0 +1,24 @@
+      ┌────────────────────────────┐
+        │      Incoming Pulse        │
+        └────────────┬───────────────┘
+                     │
+                     ▼
+           Compression Threshold
+        (P_compressed = min(P_pulse, Ω/W))
+                     │
+                     ▼
+           Resistance Equilibrium
+        (R = V² / P_compressed)
+                     │
+                     ▼
+           Microphase Stability (μ = 1/W)
+                     │
+                     ▼
+           Negative‑Nothing Counterpulse
+        (Cancels corruption overlap)
+                     │
+                     ▼
+           Loop Renewal → Loopₙ₊₁
+                     │
+                     ▼
+           Return to Zero Anchor (0)
