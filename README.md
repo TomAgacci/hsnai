@@ -22,6 +22,14 @@ python generator.py description.txt output.png \
   --image input.jpg \
   --strength 0.45
 
+python -c "import torch; print(torch.__version__); print('CUDA:', torch.cuda.is_available())"
+
+python generator.py description.txt output.png
+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install torch "diffusers[torch]" transformers accelerate safetensors pillow
+
 DIAGRAM<br>
   description.txt  +  input.jpg<br>
                    |<br>
