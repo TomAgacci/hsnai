@@ -24,14 +24,14 @@ python generator.py description.txt output.png \
 
 DIAGRAM<br>
   description.txt  +  input.jpg<br>
-  &nbsp|&nbsp&nbsp&nbsp|<br>
-  &nbsp+-------+-------+<br>
-&nbsp&nbsp&nbsp|<br>
-&nbsp&nbspHSN/ZCMS<br>
-&nbsp&nbsp&nbsp|<br>
-&nbspSDXL img2img<br>
-               |
-         ImageMagick
-               |
-               v
-          output.png
+                   |<br>
+           +-------+-------+<br>
+                   |<br>
+                   HSN/ZCMS<br>
+                   |<br>
+               SDXL img2img<br>
+                   |<br>
+         ImageMagick<br>
+                   |<br>
+                   v<br>
+          output.png<br>
