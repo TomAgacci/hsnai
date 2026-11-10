@@ -22,14 +22,14 @@ python generator.py description.txt output.png \
   --image input.jpg \
   --strength 0.45
 
-DIAGRAM
-  description.txt  +  input.jpg
-       |               |
-       +-------+-------+
-               |
-            HSN/ZCMS
-               |
-         SDXL img2img
+DIAGRAM<br>
+  description.txt  +  input.jpg<br>
+  &nbsp|&nbsp&nbsp&nbsp|<br>
+  &nbsp+-------+-------+<br>
+&nbsp&nbsp&nbsp|<br>
+&nbsp&nbspHSN/ZCMS<br>
+&nbsp&nbsp&nbsp|<br>
+&nbspSDXL img2img<br>
                |
          ImageMagick
                |
