@@ -1,6 +1,6 @@
 Licensed Under Creative Commons No Derivatives Non-Commercial Open-Source
 
-cd ~/z8
+cd ~/directiorywithfiles
 
 python3 -m venv .venv
 source .venv/bin/activate
